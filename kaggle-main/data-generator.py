@@ -3,9 +3,10 @@ import io
 import sqlite3 as sql
 import numpy as np
 import pydicom as pyd
-
+from array import *
+from tempfile import TemporaryFile
 from pydicom.encaps import decode_data_sequence
-from PIL import Image
+from PIL import Image, ImageOps
 from PIL import ImageDraw
 
 
@@ -65,11 +66,43 @@ class DicomDataset:
         # crop big image
         return bigimg[lu_yo:lu_yo+dim[1],lu_xo:lu_xo+dim[0]]
 
+#------------WIP ZONE------------#
+#slide 4 = c3eb4b8382b470dd63a9.dcm
+final_ds = DicomDataset('dicom-set/c3eb4b8382b470dd63a9.dcm')
 
-final_ds = DicomDataset('dicom-set/fff27b79894fe0157b08.dcm')
+slide = 4
+agrClass = 4
+limit = 100
+outfile = TemporaryFile()
 
-location = (69700, 17100)
-size = (500, 500)
+cells = cursor.execute(f"""SELECT Annotations.uid, Annotations.slide, Annotations.agreedClass, Annotations_coordinates.coordinateX, Annotations_coordinates.coordinateY, Annotations_coordinates.uid FROM 'Annotations_coordinates' JOIN 'Annotations' ON Annotations.uid = Annotations_coordinates.uid where agreedClass=={agrClass} and Annotations.slide=={slide} LIMIT 0,{limit}""").fetchall()
 
-img = Image.fromarray(final_ds.read_region(location, size))
-img.show()
+train_images = np.zeros((100,40,40),dtype=float)
+train_labels = np.zeros(100,dtype=int)
+
+#print(train_images.shape)
+#looping through the cells
+iteration = 0
+filename = "class_4_training.npz"
+
+for cell in cells:
+    #cell[3] is xcoord cell[4] is ycoord cell[2] is
+    location = (cell[3]-20, cell[4]-20)
+    size = (40, 40)
+    img = Image.fromarray(final_ds.read_region(location, size))
+    grayscale = ImageOps.grayscale(img)
+    np_im = np.array(grayscale)
+    train_images[iteration,:,:] = np_im
+    train_labels[iteration] = cell[2]
+    #print(iteration)
+    iteration += 1
+
+np.savez(filename, train_images, train_labels)
+print("data saved in "+filename)
+
+# draw = ImageDraw.Draw(img)
+# r=25
+
+# draw.ellipse([(location[0]-r, location[1]-r),(location[0]+r,location[1]+r)],outline=(0,0,255,255))
+#
+# img.show()
