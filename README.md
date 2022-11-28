@@ -14,7 +14,7 @@ Goal for this semester:
 `All main code is in /kaggle-main/`
 
 `datagen.py`
-- In `datagen.py` we use [*Marc Aubreville's implementation*](https://www.kaggle.com/datasets/marcaubreville/mitosis-wsi-ccmct-training-set) of fetching images & the annotations from the DICOM file & SQL file.
+- In `datagen.py` we use [*Marc Aubreville's implementation*](https://www.kaggle.com/code/marcaubreville/first-steps-with-the-mitos-wsi-ccmct-data-set) of fetching images & the annotations from the DICOM file & SQL file.
 - Specify the `agreedClass`, `slide`, `limit`, and `size`, then fetch the cells that match that
 - From this, we take each cell and take the needed data and push it into `train_labels`/`train_images`
 - Data is shuffled and returned as `(train_images, train_labels), (test_images, test_labels)`
