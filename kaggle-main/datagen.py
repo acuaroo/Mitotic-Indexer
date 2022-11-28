@@ -107,6 +107,8 @@ def generate_final_data():
             #cell[4] is ycoord
             #cell[2] is cells agreedClass
 
+            
+            # binary - div 2, -2, *-1 (or abs)
             location = (cell[3]-20, cell[4]-20)
             size = (size_set, size_set)
             img = Image.fromarray(final_ds.read_region(location, size))
