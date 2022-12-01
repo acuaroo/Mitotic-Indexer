@@ -131,7 +131,8 @@ def generate_final_data():
 
         return tr_labels, tr_images
 
-    limit = 200
+    limit = 10000
+    train_percent = 0.7
 
     c2_train_labels, c2_train_images = generate_data(4, 2, limit, 40)
     #same as above, just doing class 4 (other cells)
@@ -149,13 +150,17 @@ def generate_final_data():
     all_images = all_images[shuffler]
     all_labels = all_labels[shuffler]
 
-    #140 is the amount of train images/labels (0-140)
-    train_images = all_images[:140,:,:]
-    train_labels = all_labels[:140]
+    #rounding the limit*2 (all data length) and spliting it up into training vs testing
+    rounded_minmax = round((limit*2) * train_percent)
 
-    #141 means that number and above (141-200)
-    test_images = all_images[141:,:,:]
-    test_labels = all_labels[141:]
+    train_images = all_images[:rounded_minmax,:,:]
+    train_labels = all_labels[:rounded_minmax]
+
+    test_images = all_images[rounded_minmax:,:,:]
+    test_labels = all_labels[rounded_minmax:]
+
+    print(train_images.shape)
+    print(test_images.shape)
 
     #final return value
     #data is now fully prepared for our modle.py file
