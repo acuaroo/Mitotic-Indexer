@@ -31,7 +31,7 @@ from datagen import generate_final_data
 ```
 
 -  Add layers to `model.py`
-```md
+```
 Current List:
 - Conv2D
 - MaxPooling2D
@@ -42,6 +42,7 @@ Current List:
 - Dense
 - Dense
 ```
+
 - Setup `model.compile()`
 
 ```python
@@ -52,7 +53,7 @@ metrics=["accuracy"])
 
 - Evaluating `model`
 
-```
+```python
 test_loss, test_acc = model.evaluate(test_images, test_labels)
 
 print(test_acc)
@@ -61,7 +62,7 @@ print(test_loss)
 
 - Results!
 
-```commandline
+```python
 =================================================================
 Total params: 129,570
 Trainable params: 129,570
