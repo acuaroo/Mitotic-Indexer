@@ -159,9 +159,6 @@ def generate_final_data():
     test_images = all_images[rounded_minmax:,:,:]
     test_labels = all_labels[rounded_minmax:]
 
-    print(train_images.shape)
-    print(test_images.shape)
-
     #final return value
-    #data is now fully prepared for our modle.py file
+    #data is now fully prepared for our model.py file
     return (train_images, train_labels), (test_images, test_labels)

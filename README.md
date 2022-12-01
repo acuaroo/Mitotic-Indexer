@@ -29,3 +29,45 @@ from datagen import generate_final_data
 
 (train_images, train_labels), (test_images, test_labels) = generate_final_data()
 ```
+
+-  Add layers to `model.py`
+```md
+Current List:
+- Conv2D
+- MaxPooling2D
+- Conv2D
+- MaxPooling2D
+- Conv2D
+- Flatten
+- Dense
+- Dense
+```
+- Setup `model.compile()`
+
+```python
+optimizer="adam",
+loss="categorical_crossentropy",
+metrics=["accuracy"])
+```
+
+- Evaluating `model`
+
+```
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+
+print(test_acc)
+print(test_loss)
+```
+
+- Results!
+
+```commandline
+=================================================================
+Total params: 129,570
+Trainable params: 129,570
+Non-trainable params: 0
+_________________________________________________________________
+188/188 [==============================] - 1s 4ms/step - loss: 0.1297 - accuracy: 0.9467
+0.9466666579246521 <~ accuracy
+0.12974701821804047 <~ loss
+```
