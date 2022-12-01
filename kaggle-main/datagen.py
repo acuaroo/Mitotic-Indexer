@@ -137,6 +137,10 @@ def generate_final_data():
     #same as above, just doing class 4 (other cells)
     c4_train_labels, c4_train_images = generate_data(4, 4, limit, 40)
 
+    #turns 4 -> 0 and 2 -> 1 to make it binary
+    c4_train_labels = c4_train_labels*0
+    c2_train_labels = c2_train_labels*(1/2)
+
     #shuffling data
     all_images = np.concatenate((c2_train_images, c4_train_images), axis=0)
     all_labels = np.concatenate((c2_train_labels, c4_train_labels), axis=0)
