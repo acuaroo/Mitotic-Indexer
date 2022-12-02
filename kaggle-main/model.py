@@ -9,7 +9,7 @@ import numpy as np
 #if you're interested in using your GPU for this...
 #print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-(train_images, train_labels), (test_images, test_labels) = generate_final_data()
+(train_images, train_labels), (test_images, test_labels), (limit, train_percent) = generate_final_data()
 
 model = keras.Sequential()
 model.add(layers.Conv2D(32, (3, 3), activation="relu", input_shape=(40, 40, 1)))
@@ -21,10 +21,13 @@ model.add(layers.Flatten())
 model.add(layers.Dense(32, activation="relu"))
 model.add(layers.Dense(2, activation="softmax"))
 
-train_images = train_images.reshape((14000, 40, 40, 1))
+rounded_u = round((limit*2) * train_percent)
+round_d = (limit*2) - rounded_u
+
+train_images = train_images.reshape((rounded_u, 40, 40, 1))
 train_images = train_images.astype("float32") / 255
 
-test_images = test_images.reshape((6000, 40, 40, 1))
+test_images = test_images.reshape((round_d, 40, 40, 1))
 test_images = test_images.astype("float32") / 255
 
 train_labels = to_categorical(train_labels)

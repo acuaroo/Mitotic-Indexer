@@ -114,6 +114,9 @@ def generate_final_data():
             img = Image.fromarray(final_ds.read_region(location, size))
 
             grayscale = ImageOps.grayscale(img)
+            if iteration == 300 and agr_class == 2:
+                grayscale.save('testing.jpg')
+
             np_im = np.array(grayscale)
             tr_images[iteration,:,:] = np_im
             tr_labels[iteration] = cell[2]
@@ -161,4 +164,4 @@ def generate_final_data():
 
     #final return value
     #data is now fully prepared for our model.py file
-    return (train_images, train_labels), (test_images, test_labels)
+    return (train_images, train_labels), (test_images, test_labels), (limit, train_percent)
