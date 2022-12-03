@@ -91,14 +91,16 @@ def generate_final_data():
     #-------------------data generation-------------------#
 
     #slide 4 = c3eb4b8382b470dd63a9.dcm
-    final_ds = DicomDataset('dicom-set/c3eb4b8382b470dd63a9.dcm')
+    #slide 7 = fff27b79894fe0157b08.dcm
+    final_ds = DicomDataset('dicom-set/fff27b79894fe0157b08.dcm')
     def generate_data(slide, agr_class, lim, size_set):
         #sql command takes all of the cells with the restrictions above
         #and puts the data together (so combines cell location & cell class)
         cells = cursor.execute(f"""SELECT Annotations.uid, Annotations.slide, Annotations.agreedClass, Annotations_coordinates.coordinateX, Annotations_coordinates.coordinateY, Annotations_coordinates.uid FROM 'Annotations_coordinates' JOIN 'Annotations' ON Annotations.uid = Annotations_coordinates.uid where agreedClass=={agr_class} and Annotations.slide=={slide} LIMIT 0,{limit}""").fetchall()
 
-        tr_images = np.zeros((lim,size_set,size_set),dtype=float)
+        tr_images = np.zeros((lim,size_set,size_set,3),dtype=float)
         tr_labels = np.zeros(lim,dtype=int)
+        tr_coords = np.zeros((lim, 2),dtype=int)
 
         iteration = 0
 
@@ -106,20 +108,18 @@ def generate_final_data():
             #cell[3] is xcoord
             #cell[4] is ycoord
             #cell[2] is cells agreedClass
-
             
             # binary - div 2, -2, *-1 (or abs)
             location = (cell[3]-20, cell[4]-20)
             size = (size_set, size_set)
             img = Image.fromarray(final_ds.read_region(location, size))
 
-            grayscale = ImageOps.grayscale(img)
-            if iteration == 300 and agr_class == 2:
-                grayscale.save('testing.jpg')
-
-            np_im = np.array(grayscale)
+            np_im = np.array(img)
             tr_images[iteration,:,:] = np_im
             tr_labels[iteration] = cell[2]
+
+            tr_coords[iteration, 0] = cell[3]
+            tr_coords[iteration, 1] = cell[4]
 
             iteration += 1
 
@@ -132,14 +132,14 @@ def generate_final_data():
         # image = concat_images(image_paths, (size_set*10, size_set*10), (9, 9))
         # image.save(str(agr_class)+"_class.jpg")
 
-        return tr_labels, tr_images
+        return tr_labels, tr_images, tr_coords
 
-    limit = 10000
+    limit = 1500
     train_percent = 0.7
 
-    c2_train_labels, c2_train_images = generate_data(4, 2, limit, 40)
+    c2_train_labels, c2_train_images, c2_coords = generate_data(7, 2, limit, 40)
     #same as above, just doing class 4 (other cells)
-    c4_train_labels, c4_train_images = generate_data(4, 4, limit, 40)
+    c4_train_labels, c4_train_images, c4_coords = generate_data(7, 4, limit, 40)
 
     #turns 4 -> 0 and 2 -> 1 to make it binary
     c4_train_labels = c4_train_labels*0
