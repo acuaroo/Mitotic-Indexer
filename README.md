@@ -1,6 +1,17 @@
 # Mitotic Indexer
 > *Made for a school biology project*
 
+```python
+=================================================================
+Total params: 129,570
+Trainable params: 129,570
+Non-trainable params: 0
+_________________________________________________________________
+188/188 [==============================] - 1s 4ms/step - loss: 0.1297 - accuracy: 0.9467
+0.9466666579246521 <~ accuracy
+0.12974701821804047 <~ loss
+```
+
 ## Goal
 Final goal:
 ***Given an image of cells from a WSI, identify the mitotic figures and return a mitotic index.***
