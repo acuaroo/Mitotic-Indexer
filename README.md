@@ -1,6 +1,17 @@
 # Mitotic Indexer
 > *Made for a school biology project*
 
+```python
+=================================================================
+Total params: 129,570
+Trainable params: 129,570
+Non-trainable params: 0
+_________________________________________________________________
+188/188 [==============================] - 1s 4ms/step - loss: 0.1297 - accuracy: 0.9467
+0.9466666579246521 <~ accuracy
+0.12974701821804047 <~ loss
+```
+
 ## Goal
 Final goal:
 ***Given an image of cells from a WSI, identify the mitotic figures and return a mitotic index.***
@@ -31,16 +42,18 @@ from datagen import generate_final_data
 ```
 
 -  Add layers to `model.py`
-```
-Current List:
-- Conv2D
-- MaxPooling2D
-- Conv2D
-- MaxPooling2D
-- Conv2D
-- Flatten
-- Dense
-- Dense
+```python
+model = keras.Sequential()
+model.add(layers.Conv2D(32, (3, 3), activation="relu", input_shape=(40, 40, 3)))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation="relu"))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation="relu"))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation="relu"))
+model.add(layers.Flatten())
+model.add(layers.Dense(64, activation="relu"))
+model.add(layers.Dense(2, activation="softmax"))
 ```
 
 - Setup `model.compile()`
