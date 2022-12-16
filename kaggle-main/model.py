@@ -95,9 +95,10 @@ for cell in test_images[0:100]:
 
     draw_cell = ImageDraw.Draw(new_img)
 
-    draw_cell.text((2, 2), "p"+str(np.round(predict_labels[iteration])), font=new_font, fill=(0, 255, 0))
+    draw_cell.text((2, 2), "p"+str(np.round(predict_labels[iteration][0], 2))+" | "+"str(np.round(predict_labels[iteration][0], 2))", font=new_font, fill=(0, 255, 0))
     draw_cell.text((2, 25), "a"+str(test_labels[iteration]), font=new_font, fill=(0, 255, 0))
-
+    
+    
     new_img.save('temp-images/'+str(iteration)+'_c.jpg')
 
     iteration += 1
